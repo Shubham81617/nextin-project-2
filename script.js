@@ -18,9 +18,37 @@ const questions = [
 
 let currentQuestionIndex = 0;
 let score = 0;
+let playerName = "";
 
 function shuffleArray(array) {
     return array.sort(() => Math.random() - 0.5);
+}
+
+function showWelcomeScreen() {
+    const quizContainer = document.getElementById("quiz");
+    quizContainer.innerHTML = "";
+
+    const welcomeText = document.createElement("h2");
+    welcomeText.textContent = "Welcome to the Quiz App!";
+    quizContainer.appendChild(welcomeText);
+
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.placeholder = "Enter your name";
+    nameInput.id = "player-name";
+    quizContainer.appendChild(nameInput);
+
+    const startButton = document.createElement("button");
+    startButton.textContent = "Start Quiz";
+    startButton.onclick = () => {
+        playerName = document.getElementById("player-name").value.trim();
+        if (playerName) {
+            loadQuestion();
+        } else {
+            alert("Please enter your name to continue.");
+        }
+    };
+    quizContainer.appendChild(startButton);
 }
 
 function loadQuestion() {
@@ -62,7 +90,7 @@ function selectAnswer(selectedAnswer, button) {
 
 function showResult() {
     const quizContainer = document.getElementById("quiz");
-    quizContainer.innerHTML = `<h2>Your Score: ${score}/${questions.length}</h2>`;
+    quizContainer.innerHTML = `<h2>${playerName}, Your Score: ${score}/${questions.length}</h2>`;
     
     const restartBtn = document.createElement("button");
     restartBtn.textContent = "Restart Quiz";
@@ -73,7 +101,7 @@ function showResult() {
 function restartQuiz() {
     currentQuestionIndex = 0;
     score = 0;
-    loadQuestion();
+    showWelcomeScreen();
 }
 
-document.addEventListener("DOMContentLoaded", loadQuestion);
+document.addEventListener("DOMContentLoaded", showWelcomeScreen);
